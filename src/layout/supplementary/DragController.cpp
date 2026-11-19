@@ -497,11 +497,11 @@ void CDragStateController::mouseMove(const Vector2D& mousePos) {
     if (TRACKMOTION)
         MOTIONWINDOW->effects().onPositionUpdate(previousFull, MOTIONWINDOW->getFullWindowBoundingBox(), Desktop::View::WINDOW_UPDATE_MOUSE);
 
-    // get middle point
-    Vector2D middle = DRAGGINGTARGET->position().middle();
+    // get mouse point if we are dragging the window, window center otherwise
+    Vector2D monitorPoint = m_dragMode == MBIND_MOVE ? mousePos : DRAGGINGTARGET->position().middle();
 
     // and check its monitor
-    const auto PMONITOR = State::monitorState()->query().vec(middle).run();
+    const auto PMONITOR = State::monitorState()->query().vec(monitorPoint).run();
 
     if (PMONITOR && PMONITOR->m_activeWorkspace && DRAGGINGTARGET->floating() /* If we're resizing a tiled target, don't do this */) {
         const auto WS = PMONITOR->m_activeSpecialWorkspace ? PMONITOR->m_activeSpecialWorkspace : PMONITOR->m_activeWorkspace;
